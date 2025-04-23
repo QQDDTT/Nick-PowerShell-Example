@@ -1,3 +1,6 @@
+# 使用方法：
+# .\Create-RDP.ps1 -Address "127.0.0.1" -Username "username" -Password "password"
+
 param (
     [Parameter(Mandatory = $true)]
     [string]$Address,
@@ -13,11 +16,7 @@ param (
 $secure = ConvertTo-SecureString "${Password}" -AsPlainText -Force
 
 # 转为加密字符串
-$encrypted = [Convert]::ToBase64String([System.Text.Encoding]::Unicode.GetBytes(
-    [System.Runtime.InteropServices.Marshal]::PtrToStringUni(
-        [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($secure)
-    )
-)) 
+$encrypted = ConvertFrom-SecureString -SecureString $secure
 
 # 生成 RDP 文件内容
 $rdpContent = @"
